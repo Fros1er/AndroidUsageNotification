@@ -13,9 +13,9 @@ import java.util.Calendar
 import kotlin.math.min
 
 const val TWENTY_MINUTE = 10 * 60 * 1000L
-//const val TEN_MINUTE = 10 * 60 * 1000L
+const val TEN_MINUTE = 10 * 60 * 1000L
 
-const val TEN_MINUTE = 5 * 1000L
+//const val TEN_MINUTE = 5 * 1000L
 const val FIVE_MINUTE = 5 * 60 * 1000L
 const val THREE_MINUTE = 3 * 60 * 1000L
 //const val THREE_MINUTE = 15 * 1000L
@@ -118,7 +118,11 @@ class Alarm(context: Context) {
     }
 
     fun onAlert() {
-        createNotification(context, "${nextLengthText.value}又过去了...", Intent(context, MainActivity::class.java))
+        createNotification(
+            context,
+            "${nextLengthText.value}又过去了...",
+            Intent(context, MainActivity::class.java)
+        )
         alertCount++
         triggerAlert(getCurrTimeAlert())
     }
