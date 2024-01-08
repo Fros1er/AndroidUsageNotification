@@ -1,10 +1,9 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
-import android.os.Build
 import android.os.IBinder
 
 
@@ -13,6 +12,7 @@ class RunnerService : Service() {
         return null
     }
 
+    @SuppressLint("ForegroundServiceType")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = createNotification(
             applicationContext,
@@ -22,21 +22,20 @@ class RunnerService : Service() {
             importance = NotificationManager.IMPORTANCE_LOW,
             noticeNow = false
         )
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            startForeground(notificationId, notification)
-        } else {
-            startForeground(
-                notificationId, notification,
-                FOREGROUND_SERVICE_TYPE_LOCATION)
-        }
+        startForeground(notificationId, notification)
         return START_STICKY
     }
 
     // stop your service from being in the foreground, call this
     // before stopping the service
-    fun stopForeground() {
+    private fun stopForeground() {
         notificationId++
         stopForeground(STOP_FOREGROUND_REMOVE)
+    }
+
+    override fun onDestroy() {
+        stopForeground()
+        super.onDestroy()
     }
 
     companion object {

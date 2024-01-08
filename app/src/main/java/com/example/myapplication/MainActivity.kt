@@ -35,23 +35,6 @@ class MainActivity : ComponentActivity() {
         alarm = Alarm(applicationContext)
         keepAliveServiceIntent = Intent(applicationContext, RunnerService::class.java)
 
-        requestPermission(Manifest.permission.WAKE_LOCK, this)
-        requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            requestPermission(Manifest.permission.FOREGROUND_SERVICE, this)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            requestPermission(Manifest.permission.FOREGROUND_SERVICE_LOCATION, this)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermission(Manifest.permission.POST_NOTIFICATIONS, this)
-            requestPermission(Manifest.permission.USE_EXACT_ALARM, this)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!checkPermission(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, applicationContext)) {
-                startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-            }
-        }
-
         val screenOn = IntentFilter()
         screenOn.addAction("android.intent.action.SCREEN_ON")
         val screenOff = IntentFilter()
@@ -71,39 +54,24 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
 
-    override fun onStop() {
-        super.onStop()
-        stopService(keepAliveServiceIntent)
-    }
-
-//    private val a = 10000L
-//    private val b = 1000L
-//    private val c = mutableLongStateOf(a)
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        val timer = object : CountDownTimer(a, b) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                Log.d("MYLOG", "text updated programmatically")
-//                c.longValue = millisUntilFinished
-//            }
-//
-//            override fun onFinish() {
-//                c.longValue = 0
-//            }
+        requestPermission(Manifest.permission.WAKE_LOCK, this)
+//        requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            requestPermission(Manifest.permission.FOREGROUND_SERVICE, this)
+        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+//            requestPermission(Manifest.permission.FOREGROUND_SERVICE_LOCATION, this)
 //        }
-//        timer.start()
-//        setContent { CountDown() }
-//    }
-//
-//    @Composable
-//    fun CountDown() {
-//        val milliseconds by c
-//        val text = (milliseconds / 1000).toString()
-//        Text(text)
-//    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission(Manifest.permission.POST_NOTIFICATIONS, this)
+            requestPermission(Manifest.permission.USE_EXACT_ALARM, this)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!checkPermission(ACTION_REQUEST_SCHEDULE_EXACT_ALARM, applicationContext)) {
+                startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+            }
+        }
+    }
 }
 
 @Composable
